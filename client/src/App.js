@@ -41,6 +41,22 @@ function App() {
 
     setTodos(todos => todos.filter(todo => todo._id !== data._id))
   }
+
+  const addToDo = async () => {
+    const data = await fetch(api_base + "/todo/new", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({
+        text: newTodo
+      })
+    }).then(res => res.json());
+
+    setTodos([...todos, data])
+    setPopUpActive(false)
+    setNewTodo("")
+  }
   
   return (
     <div className="App">
@@ -65,11 +81,11 @@ function App() {
                 <div className='popUp'>
                   <div className='closePopUp' onClick={() => setPopUpActive(false)}>x</div>
                   <h3>Add Task</h3>
-                  { newTodo }
                   <input type='text'
                   className='add-todo-input'
                   onChange={e => setNewTodo(e.target.value)}
                   value={newTodo} />
+                  <div className='button' onClick={addToDo}>Create Task</div>
                 </div>
               ) : ''}
           </Body>
